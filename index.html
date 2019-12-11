@@ -12,39 +12,273 @@
     <script type="text/javascript" src="index.js"></script>    
     <link rel="stylesheet" type="text/css" href="index.css" />
     <title>To-Do List</title>
+    <script>
 
+        var string;
+document.addEventListener('deviceready', onDeviceReady, false);
+function onDeviceReady(){
+  var size =0;
+  window.requestFileSystem(LocalFileSystem.PERSISTENT, size, onFSsuccess, onFSerror);
+}
+function onFSsuccess(FS){
+   myRoot=FS.root;
+   myRoot.getFile('sample.txt', {create: true, exclusive:false}, function(fileEntry) {setUP(fileEntry, null, true);}, onCreateErr);
+   alert ("Success for FS"); 
+}
+function getItReady(file)
+{
+   writeFile(file, null);
+}
+function readIT() {
+//notice the ugly code for the file method. It can be beautified
+   myFile.file(function (file) {
+      var reader = new FileReader();
+      reader.onloadend = function() {
+		
+          document.getElementById("filedata").innerHTML = this.result;
+      };
+      reader.readAsText(file);
+    }, onReadErr);
+}
+function setUP(fileEntry, x, isAppend){
+	//setUP the file pointer for later use
+    myFile=fileEntry;
+	  
+}
+function onFSerror(err){
+	alert ("FS Error " + err);
+}
+function parseData (entries) { //for finding a file in the dir
+		
+		  exists =-1;
+		  for (var i=0, len=entries.length; i< len; i++) {
+			if (entries[i].isFile && "sample2.txt".test(entries[i].name)) {
+				exists=i;
+				break;
+			}
+		  }
+		  if (exists == -1) {
+		   alert ("The file isn't created yet");
+		   return;
+		  }
+		  else 
+		   myFile=entries[exists];
+		 
+		 alert ("Myfile is setup for use");
+}
+
+function onReadErr (err){
+   alert ("Read Error " + err);
+}
+function onWriteErr (err){
+   alert ("Write Error " + err);
+}
+function onCreateErr (err){
+   alert ("Create Error " + err);
+}
+function appendIT() {
+  //getfile already called and set up myFile
+  myFile.createWriter(onGetAppender, onWriteErr);
+}
+function onGetAppender(myAppender) {
+   //myWriter=writer;
+   str = dataToSave
+   myAppender.seek(myAppender.length);
+   myAppender.write(str);
+}
+function writeIT() {
+  //getfile already called and set up myFile
+  myFile.createWriter(onGetWriter, onWriteErr);
+}
+function onGetWriter(myWriter2) {
+   //myWriter=writer;
+   str=dataToSave
+   myWriter2.seek(0);
+   myWriter2.write(str);
+} 
+
+</script>
 </head>
 
 
 <body>
 
-    <script>
+<p id="title">TO-DO LIST</p>
+<!--table of labels at the top -->
+    <table width = 100%> 
+        <tr> 
+            <td>Done?</td>
+            <td>Task</td>
+            <td><img src="img/calendar-black.png" ></td>
+            <td>Priority</td>
+            <td>Category</td>
+        </tr>
+    </table>
+
+<div id = "data">
+    <!-- the div tag that all of the data gets written to by the onButtonClick() function-->
+
+    <table id = "myTable" class = "itask" width ="100%" >
+
+        <!-- the rows get written to this table-->
+        
+    </table>
+
+</div>
+
+<script>
+    
+var rows, toDoItem, dueDate, priority, category, str, tbh, check, num, todaysDate, dataToSave; 
+    
+    function onButtonClick(){
+        //the function that writes a new row to the to-do list
+            var table = document.getElementById("myTable");
+            var row = table.insertRow(-1);
+            var cell1 = row.insertCell(0)
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+
+            cell1.innerHTML = "<input type ='checkBox' id ='done' onclick ='del(this)'></input>" // radio button
+
+            toDoItem = document.getElementById('ToDoItem').value // the name of the item
+            cell2.innerHTML = toDoItem;
+            
+            dueDate = document.getElementById('dueDate').value // the date the item needs done by
+            cell3.innerHTML = "<div id = Due>" + dueDate + "</div>"
+            
+            
+            priority = document.getElementById('priority').value   // the prioriry of the item 
+                if (priority == "High") { 
+                    cell4.innerHTML = "<div id='" + id + "' style='color:#FFA500' onclick='highToMed()'>" + priority + "</div>"
+            
+                } else if(priority == "Medium") {
+                    cell4.innerHTML = "<div id='" + id + "' style='color:#FFFF00' onclick='medToLow()'>" + priority + "</div>"  // handles the css coloring
+                } else{
+                    cell4.innerHTML = "<div id='" + id + "' style='color:#000080' onclick='lowToHigh()'>" + priority + "</div>" 
+                }
+                alert(id);
+            
+            category = document.getElementById('category').value // handles the category of the item 
+            cell5.innerHTML = category;
+
+            dataToSave = document.getElementById("data").innerHTML // assigns all of the data in the div tag/table to a variable to be saved
+            alert(dataToSave);
+            inc();//increments any variable that needs incremented 
+            writeIT();//append the innerHTML to the text document
+            
+        
+        }
+
+
+        function del(r) { //delete function to delete an item
+            
+                
+                if (confirm("If you would like to delete this row press OKAY")) {  
+                    var i = r.parentNode.parentNode.rowIndex;
+                    document.getElementById("myTable").deleteRow(i); //actually deletes the row
+                } 
+                else {
+                  alert("the task will remain on the project"); //else handler incase you want to keep it
+
+                }
+
+            
+}   
+
+      
+
+        
+        var increment, id   
+        increment = 1 
+        id = "ex"
+        function inc(){ //increment the id's that need incremented
+            check ="check"
+            check += increment
+            num = -1
+            num += increment
+            id += increment
+            increment++
+            }
+
+
+
+        function save(){ //the function responsible for saving the items on the app
+
+
+        }
+         
+       
+        function notes(){
+            //overdue in red bold font 
+            //saving the stuff to a text document
+        }
+
+        //functions to handle changing the priority and changing the text color based on the priority. 
+            function highToMed() 
+            {
+
+            var trs="<div id='" + id + "' style='color:Yellow' onclick ='medToLow()'>";
+            trs +="Medium</div>";
+            document.getElementById(id).outerHTML=trs;
+            
+            }
+            function medToLow()
+            {
+                var rst="<div id ='" + id + "' style = 'color:Blue' onclick ='lowToHigh()'>";
+                rst+= "Low</div>"
+                document.getElementById(id).outerHTML=rst
+            }
+            function lowToHigh()
+            {
+                var tbh="<div id ='" + id + "' style = 'color:Orange' onclick ='highToMed()'>";
+                tbh+= "High</div>"
+                document.getElementById(id).outerHTML=tbh
+            }
+</script>
+
+<div id = "navbar"> <!-- the navigation bar at the bottom where all of the inputs go-->
+        <table width="425" id = "nav" >
+            <tr>
+                <td></td>
+                <td>Task</td>
+                <td><img src="img/calendar-black.png" onclick="addDate()"></td>
+                <td>Priority</td>
+                <td>Category</td>
+            </tr>
+
+            <tr> 
+                <td><img src="img/plus-black.png" onclick="onButtonClick()"></td>  
+                <td><input type = "text" id = "ToDoItem" value="Enter To Do Item"></td>
+                <td><input type='date' id='dueDate' min="2019-10-01" max="2020-12-31"> </td>
+                <td><select id = "priority">
+                        <option id = "h" value="High">High</option>
+                        <option id ="m" value="Medium">Medium</option>
+                        <option id = "l"value="Low">Low</option>
+                    </select>
+                </td>
+
+                <td> <select id ="category">
+                        <option value="personal">Personal</option>
+                        <option value="work">Work</option>
+                    </select>
+                </td>
+                    
+            </tr>
+        </table>
+        <button type="button" onclick="readIT()">Read</button>
+</div>
+
+<br/>
+</body>
+
+<!--<script>
         function navHome() {
     document.location.assign('index.html');
     }
-
+//backround image?? 
 
 </script> 
-<div id = "title">JUSTIN BORELLI, JUSTIN CONKLIN, AARON SMITH's APP
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    
-<button type = "button" id = "home" onclick ="navHome()">Go to the App</button>
-</div>
-</body>
+<button type = "button" id = "home" onclick ="navHome()">Go to the App</button>-->
 </html>
