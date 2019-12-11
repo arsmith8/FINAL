@@ -109,7 +109,7 @@ function onGetWriter(myWriter2) {
         <tr> 
             <td>Done?</td>
             <td>Task</td>
-            <td><img src="img/calendar-black.png" ></td>
+            <td><img src="calendar-black.png" ></td>
             <td>Priority</td>
             <td>Category</td>
         </tr>
@@ -158,13 +158,13 @@ var rows, toDoItem, dueDate, priority, category, str, tbh, check, num, todaysDat
                 } else{
                     cell4.innerHTML = "<div id='" + id + "' style='color:#000080' onclick='lowToHigh()'>" + priority + "</div>" 
                 }
-                alert(id);
+         
             
             category = document.getElementById('category').value // handles the category of the item 
             cell5.innerHTML = category;
 
             dataToSave = document.getElementById("data").innerHTML // assigns all of the data in the div tag/table to a variable to be saved
-            alert(dataToSave);
+       
             inc();//increments any variable that needs incremented 
             writeIT();//append the innerHTML to the text document
             
@@ -243,13 +243,13 @@ var rows, toDoItem, dueDate, priority, category, str, tbh, check, num, todaysDat
             <tr>
                 <td></td>
                 <td>Task</td>
-                <td><img src="img/calendar-black.png" onclick="addDate()"></td>
+                <td><img src="calendar-black.png" onclick="addDate()"></td>
                 <td>Priority</td>
                 <td>Category</td>
             </tr>
 
             <tr> 
-                <td><img src="img/plus-black.png" onclick="onButtonClick()"></td>  
+                <td><img src="plus-black.png" onclick="onButtonClick()"></td>  
                 <td><input type = "text" id = "ToDoItem" value="Enter To Do Item"></td>
                 <td><input type='date' id='dueDate' min="2019-10-01" max="2020-12-31"> </td>
                 <td><select id = "priority">
@@ -267,7 +267,6 @@ var rows, toDoItem, dueDate, priority, category, str, tbh, check, num, todaysDat
                     
             </tr>
         </table>
-        <button type="button" onclick="readIT()">Read</button>
 </div>
 
 <br/>
