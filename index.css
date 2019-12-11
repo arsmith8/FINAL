@@ -1,0 +1,20 @@
+#title{ 
+text-align: center;
+
+}
+#navbar {
+    bottom: 0%;
+    left: 0%;
+    position: fixed;
+    padding: 5px;
+}
+body{ 
+background-color: gainsboro;
+
+}
+#nav{ 
+    background-color: lightblue;
+}
+.itask{ 
+    text-align: left;
+}
